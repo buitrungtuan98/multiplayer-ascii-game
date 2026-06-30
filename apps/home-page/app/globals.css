@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --ascii-bg: #000000;
+  --ascii-fg: #00ff00;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ascii-bg);
+  color: var(--ascii-fg);
+  font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--ascii-fg);
+  text-decoration: none;
+}
+
+a:hover {
+  background-color: var(--ascii-fg);
+  color: var(--ascii-bg);
+}

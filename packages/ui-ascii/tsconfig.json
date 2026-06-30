@@ -2,7 +2,9 @@
   "extends": "@ascii-game/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "jsx": "react",
+    "declaration": true
   },
   "include": ["src/**/*"]
 }
