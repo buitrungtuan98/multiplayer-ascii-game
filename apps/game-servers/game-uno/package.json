@@ -1,12 +1,16 @@
 {
-  "name": "game-uno",
+  "name": "game-server-uno",
   "version": "1.0.0",
   "private": true,
+  "description": "Engine điều phối phòng chơi game bài Uno ASCII (Xử lý lượt theo Turn-based)",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "bun run src/index.ts",
-    "start": "bun run src/index.ts"
+    "dev": "bun --watch src/index.ts"
   },
   "dependencies": {
-    "@ascii-game/shared-types": "workspace:*"
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/game-configs": "workspace:*",
+    "@ascii-game/game-logic-uno": "workspace:*",
+    "ioredis": "^5.3.2"
   }
 }

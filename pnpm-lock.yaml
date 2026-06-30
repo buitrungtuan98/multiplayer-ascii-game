@@ -99,29 +99,9 @@ importers:
         specifier: ^4.0.0
         version: 4.3.2
 
-  packages/ascii-renderer:
-    devDependencies:
-      '@ascii-game/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@ascii-game/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
+  packages/ascii-renderer: {}
 
-  packages/core-math:
-    devDependencies:
-      '@ascii-game/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@ascii-game/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
+  packages/core-math: {}
 
   packages/eslint-config:
     dependencies:
@@ -150,16 +130,13 @@ importers:
         version: 5.9.3
 
   packages/game-logic-uno:
-    devDependencies:
-      '@ascii-game/eslint-config':
+    dependencies:
+      '@ascii-game/core-math':
         specifier: workspace:*
-        version: link:../eslint-config
-      '@ascii-game/typescript-config':
+        version: link:../core-math
+      '@ascii-game/shared-types':
         specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
+        version: link:../shared-types
 
   packages/game-logic-zombie:
     devDependencies:
@@ -173,17 +150,7 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
-  packages/lockstep-engine:
-    devDependencies:
-      '@ascii-game/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@ascii-game/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
+  packages/lockstep-engine: {}
 
   packages/shared-types: {}
 
