@@ -1,61 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export interface AsciiButtonProps {
+  children: React.ReactNode;
   onClick?: () => void;
-  children: string;
-  width?: number;
+  className?: string;
+  disabled?: boolean;
+  variant?: 'primary' | 'secondary' | 'alert' | 'ghost';
+  style?: React.CSSProperties;
 }
 
-export const AsciiButton: React.FC<AsciiButtonProps> = ({ onClick, children, width }) => {
-  const [hovered, setHovered] = useState(false);
-  const [active, setActive] = useState(false);
+export const AsciiButton: React.FC<AsciiButtonProps> = ({
+  children,
+  onClick,
+  className = '',
+  disabled = false,
+  variant = 'primary',
+  style
+}) => {
 
-  const text = children;
-  const paddingLength = Math.max(0, (width || text.length + 4) - text.length - 2);
-  const padLeft = Math.floor(paddingLength / 2);
-  const padRight = Math.ceil(paddingLength / 2);
-
-  const innerText = `${' '.repeat(padLeft)}${text}${' '.repeat(padRight)}`;
-  const topBorder = `┌${'─'.repeat(innerText.length)}┐`;
-  const bottomBorder = `└${'─'.repeat(innerText.length)}┘`;
-
-  const defaultStyle: React.CSSProperties = {
-    fontFamily: '"JetBrains Mono", "Courier New", monospace',
-    whiteSpace: 'pre',
-    lineHeight: '1.2',
-    color: '#00ff00',
-    backgroundColor: '#000000',
-    display: 'inline-block',
-    cursor: 'pointer',
-    userSelect: 'none',
-  };
-
-  const hoverStyle: React.CSSProperties = {
-    ...defaultStyle,
-    color: '#000000',
-    backgroundColor: '#00ff00',
-  };
-
-  const activeStyle: React.CSSProperties = {
-    ...defaultStyle,
-    color: '#ffffff',
-    backgroundColor: '#00aa00',
-  };
-
-  const currentStyle = active ? activeStyle : hovered ? hoverStyle : defaultStyle;
+  let variantClasses = '';
+  switch(variant) {
+    case 'primary':
+      variantClasses = "bg-[#33FF33] text-black shadow-[0_0_10px_rgba(51,255,51,0.6)] hover:bg-[#C0FFC0]";
+      break;
+    case 'secondary':
+      variantClasses = "bg-[#005500] text-[#33FF33] border border-[#33FF33] hover:bg-[#33FF33] hover:text-black hover:shadow-[0_0_15px_rgba(51,255,51,0.8)]";
+      break;
+    case 'alert':
+      variantClasses = "border border-[#FF3333] text-[#FF3333] hover:bg-[#FF3333]/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,51,51,0.8)]";
+      break;
+    case 'ghost':
+      variantClasses = "text-[#00AA00] hover:text-[#33FF33] hover:shadow-[0_0_10px_rgba(192,255,192,0.5)]";
+      break;
+  }
 
   return (
-    <div
-      style={currentStyle}
+    <button
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setActive(false); }}
-      onMouseDown={() => setActive(true)}
-      onMouseUp={() => setActive(false)}
+      disabled={disabled}
+      style={style}
+      className={`px-4 py-1 text-sm font-bold flex items-center justify-center transition-all ${disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'} ${variantClasses} ${className}`}
     >
-      <div>{topBorder}</div>
-      <div>│{innerText}│</div>
-      <div>{bottomBorder}</div>
-    </div>
+      {children}
+    </button>
   );
 };

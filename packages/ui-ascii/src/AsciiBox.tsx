@@ -1,63 +1,31 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 
 export interface AsciiBoxProps {
   children?: React.ReactNode;
-  width?: number;
-  title?: string;
+  width?: number | string;
+  title?: React.ReactNode;
+  className?: string;
   style?: React.CSSProperties;
+  onClick?: () => void;
 }
 
-export const AsciiBox: React.FC<AsciiBoxProps> = ({ children, width = 40, title, style }) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState(0);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      // Get height of content in characters (approximate based on line-height)
-      const computedStyle = window.getComputedStyle(contentRef.current);
-      const lineHeight = parseFloat(computedStyle.lineHeight);
-      const height = contentRef.current.getBoundingClientRect().height;
-
-      // Calculate how many lines of text we have
-      const lines = Math.max(1, Math.ceil(height / lineHeight));
-      setContentHeight(lines);
-    }
-  }, [children]);
-
-  const horizontalLine = '─'.repeat(Math.max(0, width - 2));
-  const titleString = title ? ` ${title} ` : '';
-  const topBorder = `┌${titleString.padEnd(width - 2, '─')}┐`;
-  const bottomBorder = `└${horizontalLine}┘`;
-
-  // Generate vertical bars that span the height of the content
-  const leftBorder = Array.from({ length: contentHeight }).map((_, i) => <div key={i}>│</div>);
-  const rightBorder = Array.from({ length: contentHeight }).map((_, i) => <div key={i}>│</div>);
-
+export const AsciiBox: React.FC<AsciiBoxProps> = ({ children, title, className = '', style, onClick }) => {
   return (
-    <div style={{
-      fontFamily: '"JetBrains Mono", "Courier New", Courier, monospace',
-      lineHeight: '1.2',
-      color: '#00ff00',
-      backgroundColor: '#000000',
-      display: 'inline-block',
-      ...style
-    }}>
-      <div style={{ whiteSpace: 'pre' }}>{topBorder}</div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {leftBorder}
+    <div
+      className={`crt-box group flex flex-col h-full bg-black/60 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      style={style}
+      onClick={onClick}
+    >
+      {title && (
+        <div className="flex justify-between items-start mb-2 relative z-10">
+          <h3 className="text-xl font-bold text-[#C0FFC0] glow-text-light group-hover:text-[#33FF33] flex items-center">
+            {title}
+          </h3>
         </div>
-        <div ref={contentRef} style={{ width: `${width - 2}ch`, overflow: 'hidden' }}>
-          {children}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {rightBorder}
-        </div>
+      )}
+      <div className="flex-grow relative z-10 text-sm text-[#00AA00]">
+        {children}
       </div>
-      <div style={{ whiteSpace: 'pre' }}>{bottomBorder}</div>
     </div>
   );
 };

@@ -1,0 +1,9 @@
+
+> web-portal@1.0.0 start /app/apps/web-portal
+> next start "-p" "4005"
+
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:4005
+
+ ✓ Starting...
+ ✓ Ready in 452ms

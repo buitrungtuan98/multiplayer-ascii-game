@@ -6,11 +6,12 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "lint": "eslint src/**/*.tsx src/**/*.ts",
-    "build": "tsc"
+    "build": "tsc && cp src/global-crt.css dist/"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.300.0"
   },
   "devDependencies": {
     "@ascii-game/eslint-config": "workspace:*",
