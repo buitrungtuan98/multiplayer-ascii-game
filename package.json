@@ -1,0 +1,19 @@
+{
+  "name": "ascii-multiplayer-game-universe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "devDependencies": {
+    "eslint-config-next": "^16.2.9"
+  }
+}

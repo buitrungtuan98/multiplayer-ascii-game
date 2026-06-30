@@ -1,0 +1,14 @@
+{
+  "name": "@ascii-game/game-logic-aoe",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@ascii-game/eslint-config": "workspace:*",
+    "@ascii-game/typescript-config": "workspace:*",
+    "typescript": "^5.0.0"
+  }
+}

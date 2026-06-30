@@ -1,0 +1,12 @@
+{
+  "name": "game-rts-aoe",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*"
+  }
+}
