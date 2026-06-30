@@ -1,6 +1,8 @@
 node_modules/
-node_modules
-**/node_modules/
-dist/
-.turbo/
 .next/
+dist/
+build/
+.env
+.DS_Store
+*.log
+.turbo/

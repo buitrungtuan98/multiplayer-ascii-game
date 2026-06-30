@@ -1,14 +1,9 @@
 {
   "name": "@ascii-game/game-configs",
   "version": "1.0.0",
-  "private": true,
+  "description": "Trung tâm chứa cấu hình khai báo động cho mọi trò chơi",
   "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint src/**/*.ts"
-  },
-  "devDependencies": {
-    "@ascii-game/eslint-config": "workspace:*",
-    "@ascii-game/typescript-config": "workspace:*",
-    "typescript": "^5.0.0"
+    "lint": "eslint src/"
   }
 }

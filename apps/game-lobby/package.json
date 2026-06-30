@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
     "start": "bun run src/index.ts"
   },
   "dependencies": {
-    "@ascii-game/shared-types": "workspace:*"
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/game-configs": "workspace:*",
+    "ioredis": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
   }
 }

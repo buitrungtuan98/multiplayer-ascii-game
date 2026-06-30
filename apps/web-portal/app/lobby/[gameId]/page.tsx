@@ -3,27 +3,84 @@
 import React, { useState, useEffect } from 'react';
 import { Terminal, Globe, Server, Lock } from 'lucide-react';
 import { AsciiBox, AsciiButton } from '@ascii-game/ui-ascii';
+import { RoomMetadata } from '@ascii-game/shared-types';
+
+const LOBBY_API_URL = process.env.NEXT_PUBLIC_LOBBY_API_URL || 'http://localhost:8080';
+const LOBBY_WS_URL = process.env.NEXT_PUBLIC_LOBBY_WS_URL || 'ws://localhost:8080';
 
 export default function Lobby({ params }: { params: { gameId: string } }) {
   const [playerName, setPlayerName] = useState('Guest_' + Math.floor(Math.random() * 9999));
-  const [roomType, setRoomType] = useState('public');
+  const [roomType, setRoomType] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
   const [blink, setBlink] = useState(true);
+  const [publicRooms, setPublicRooms] = useState<RoomMetadata[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => setBlink((b) => !b), 500);
     return () => clearInterval(interval);
   }, []);
 
-  const publicRooms = [
-    { id: 'X7A9B', host: 'Hacker01', players: 3, maxPlayers: 8, ping: 15 },
-    { id: 'Z2V1C', host: 'NeoMatrix', players: 7, maxPlayers: 8, ping: 42 }
-  ];
+  useEffect(() => {
+    const wsUrl = `${LOBBY_WS_URL}/ws-lobby?gameId=${params.gameId}`;
+    const ws = new WebSocket(wsUrl);
 
-  const handleCreateRoom = (e: React.FormEvent) => {
+    ws.onopen = () => {
+      console.log('Connected to Lobby WebSocket');
+    };
+
+    ws.onmessage = async (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'INITIAL_ROOMS') {
+          setPublicRooms(data.rooms);
+          setLoadingRooms(false);
+        } else if (data.type === 'ROOMS_UPDATED') {
+          const res = await fetch(`${LOBBY_API_URL}/api/rooms?gameId=${params.gameId}`);
+          if (res.ok) {
+            const rooms = await res.json();
+            setPublicRooms(rooms);
+          }
+        }
+      } catch (err) {
+        console.error('WebSocket parse error:', err);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from Lobby WebSocket');
+    };
+
+    return () => ws.close();
+  }, [params.gameId]);
+
+  const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!playerName.trim()) return;
-    const newRoomCode = Math.random().toString(36).substring(2, 7).toUpperCase();
-    window.location.href = `/join/${newRoomCode}?host=${encodeURIComponent(playerName)}&game=${params.gameId}`;
+    setErrorMsg('');
+
+    try {
+      const res = await fetch(`${LOBBY_API_URL}/api/create-room`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gameId: params.gameId,
+          hostName: playerName.trim(),
+          visibility: roomType,
+        }),
+      });
+
+      if (!res.ok) {
+        setErrorMsg('Lỗi khởi tạo phòng từ máy chủ.');
+        return;
+      }
+
+      const data = await res.json();
+      window.location.href = `/join/${data.roomId}?hostId=${encodeURIComponent(data.hostId)}&hostName=${encodeURIComponent(playerName)}&game=${params.gameId}&workerPort=${data.workerPort}`;
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Không thể kết nối đến máy chủ Sảnh chờ.');
+    }
   };
 
   const handleJoin = (roomId: string) => {
@@ -52,13 +109,15 @@ export default function Lobby({ params }: { params: { gameId: string } }) {
             <AsciiBox className="lg:col-span-2">
               <h3 className="text-[#C0FFC0] font-bold mb-4 flex items-center glow-text-light"><Globe size={18} className="mr-2"/> DANH SÁCH LOBBY CÔNG KHAI</h3>
 
-              {publicRooms.length > 0 ? (
+              {loadingRooms ? (
+                <div className="text-[#00AA00] p-4 text-center blink">ĐANG QUÉT MẠNG...</div>
+              ) : publicRooms.length > 0 ? (
                 <div className="space-y-3">
                   {publicRooms.map(room => (
                     <div key={room.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 border border-[#005500] hover:border-[#33FF33] hover:bg-[#002200] transition-colors group">
                       <div>
                         <div className="text-[#33FF33] font-bold text-lg group-hover:glow-text">NODE_ID: [{room.id}]</div>
-                        <div className="text-xs text-[#00AA00]">CHỦ PHÒNG: {room.host} | ĐỘ TRỄ: {room.ping}ms</div>
+                        <div className="text-xs text-[#00AA00]">CHỦ PHÒNG: {room.hostName} | PORT: {room.workerPort}</div>
                       </div>
                       <div className="flex items-center gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between">
                         <div className="text-[#00AA00] text-sm">
@@ -101,19 +160,21 @@ export default function Lobby({ params }: { params: { gameId: string } }) {
                   <label className="block text-[#C0FFC0] text-sm mb-2">&gt; TRẠNG THÁI PHÒNG:</label>
                   <div className="grid grid-cols-2 gap-4">
                     <div
-                      onClick={() => setRoomType('public')}
-                      className={`p-4 border cursor-pointer transition-all flex items-center justify-center ${roomType === 'public' ? 'border-[#33FF33] bg-[#002200] glow-box shadow-[inset_0_0_15px_rgba(51,255,51,0.3)]' : 'border-[#005500] text-[#00AA00] hover:border-[#00AA00]'}`}
+                      onClick={() => setRoomType('PUBLIC')}
+                      className={`p-4 border cursor-pointer transition-all flex items-center justify-center ${roomType === 'PUBLIC' ? 'border-[#33FF33] bg-[#002200] glow-box shadow-[inset_0_0_15px_rgba(51,255,51,0.3)]' : 'border-[#005500] text-[#00AA00] hover:border-[#00AA00]'}`}
                     >
                       <Globe size={18} className="mr-2" /> PUBLIC
                     </div>
                     <div
-                      onClick={() => setRoomType('private')}
-                      className={`p-4 border cursor-pointer transition-all flex items-center justify-center ${roomType === 'private' ? 'border-[#33FF33] bg-[#002200] glow-box shadow-[inset_0_0_15px_rgba(51,255,51,0.3)]' : 'border-[#005500] text-[#00AA00] hover:border-[#00AA00]'}`}
+                      onClick={() => setRoomType('PRIVATE')}
+                      className={`p-4 border cursor-pointer transition-all flex items-center justify-center ${roomType === 'PRIVATE' ? 'border-[#33FF33] bg-[#002200] glow-box shadow-[inset_0_0_15px_rgba(51,255,51,0.3)]' : 'border-[#005500] text-[#00AA00] hover:border-[#00AA00]'}`}
                     >
                       <Lock size={18} className="mr-2" /> PRIVATE
                     </div>
                   </div>
                 </div>
+
+                {errorMsg && <div className="text-red-500 text-sm font-bold mt-2">! {errorMsg}</div>}
 
                 <div className="pt-4 border-t border-[#005500]">
                   <button

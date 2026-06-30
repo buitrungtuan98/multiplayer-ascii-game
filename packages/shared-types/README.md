@@ -1,16 +1,14 @@
-# @ascii-game/shared-types
+# `@ascii-game/shared-types`
 
 ## Tổng quan
-Vai trò của folder này trong toàn hệ thống: (Cần bổ sung)
+Single Source of Truth (Nguồn chân lý duy nhất) cho toàn bộ Interface, Type và Dữ liệu truyền tải mạng trong dự án ASCII Multiplayer Game Universe.
 
 ## Kiểu dữ liệu đặc thù
-(Cần bổ sung)
+- `RoomMetadata`: Chứa thông tin phòng ở sảnh chờ, bao gồm `workerPort` phục vụ định tuyến động.
+- `IGameEngine`: Interface bắt buộc đối với mọi loại game để tương thích với hệ thống Worker Lockstep.
 
-## Tham số nghiệp vụ (Business Parameters)
-(Cần bổ sung)
+## Tham số nghiệp vụ
+Không có cấu hình trực tiếp ở đây, các config chuyển sang `game-configs`.
 
-## Hướng dẫn Kiểm thử cục bộ (Testing Guide)
-Chạy `pnpm test` để kiểm thử module này.
-
-## Nhật ký thay đổi (Change Log)
-- Khởi tạo package.
+## Hướng dẫn Kiểm thử cục bộ
+Package này chỉ chứa TypeScript Interface, không cần Unit Test.

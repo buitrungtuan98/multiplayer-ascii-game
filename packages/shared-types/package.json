@@ -1,14 +1,9 @@
 {
   "name": "@ascii-game/shared-types",
   "version": "1.0.0",
-  "private": true,
+  "description": "Single Source of Truth cho toàn bộ Interface, Type và Dữ liệu truyền tải qua mạng",
   "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint src/**/*.ts"
-  },
-  "devDependencies": {
-    "@ascii-game/eslint-config": "workspace:*",
-    "@ascii-game/typescript-config": "workspace:*",
-    "typescript": "^5.0.0"
+    "lint": "eslint src/"
   }
 }
