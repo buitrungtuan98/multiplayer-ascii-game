@@ -113,6 +113,7 @@ const server = serve({
         let workerPort = 8081;
         if (payload.gameId === "zombie-invasion") workerPort = 8082;
         if (payload.gameId === "aoe-1") workerPort = 8083;
+        if (payload.gameId === "starcraft-1") workerPort = 8084;
 
         // Sinh playerId ngẫu nhiên cho Host
         const hostId = "p_" + randomBytes(4).toString("hex");

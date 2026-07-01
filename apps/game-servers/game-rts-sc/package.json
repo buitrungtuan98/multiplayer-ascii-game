@@ -1,0 +1,17 @@
+{
+  "name": "game-server-rts-sc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Engine điều phối phòng chơi StarCraft ASCII (15Hz)",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/game-configs": "workspace:*",
+    "@ascii-game/game-logic-starcraft": "workspace:*",
+    "@ascii-game/core-socket": "workspace:*",
+    "ioredis": "^5.3.2"
+  }
+}

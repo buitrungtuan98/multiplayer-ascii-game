@@ -11,3 +11,10 @@ build/
 *.log
 *.pid
 verification/
+
+node_modules/
+.next/
+dist/
+target/
+__pycache__/
+coverage/
