@@ -1,14 +1,13 @@
 {
   "name": "@ascii-game/game-logic-zombie",
   "version": "1.0.0",
-  "private": true,
+  "description": "Engine Game Zombie Invasion CO-OP (30Hz Lockstep, Flow Field O(1))",
   "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/"
   },
-  "devDependencies": {
-    "@ascii-game/eslint-config": "workspace:*",
-    "@ascii-game/typescript-config": "workspace:*",
-    "typescript": "^5.0.0"
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/core-math": "workspace:*"
   }
 }

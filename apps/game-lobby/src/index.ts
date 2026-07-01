@@ -110,7 +110,7 @@ const server = serve({
 
         const roomCode = generateRoomCode();
         // Cập nhật hard-coded port cho mock testing (theo cấu trúc docker thì worker 1 là 8081)
-        const workerPort = 8081;
+        const workerPort = payload.gameId === "zombie-invasion" ? 8082 : 8081;
 
         // Sinh playerId ngẫu nhiên cho Host
         const hostId = "p_" + randomBytes(4).toString("hex");

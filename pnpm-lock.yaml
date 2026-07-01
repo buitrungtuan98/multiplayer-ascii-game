@@ -67,6 +67,9 @@ importers:
       '@ascii-game/ascii-renderer':
         specifier: workspace:*
         version: link:../../packages/ascii-renderer
+      '@ascii-game/core-math':
+        specifier: workspace:*
+        version: link:../../packages/core-math
       '@ascii-game/game-configs':
         specifier: workspace:*
         version: link:../../packages/game-configs
@@ -146,16 +149,13 @@ importers:
         version: link:../shared-types
 
   packages/game-logic-zombie:
-    devDependencies:
-      '@ascii-game/eslint-config':
+    dependencies:
+      '@ascii-game/core-math':
         specifier: workspace:*
-        version: link:../eslint-config
-      '@ascii-game/typescript-config':
+        version: link:../core-math
+      '@ascii-game/shared-types':
         specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
+        version: link:../shared-types
 
   packages/lockstep-engine: {}
 

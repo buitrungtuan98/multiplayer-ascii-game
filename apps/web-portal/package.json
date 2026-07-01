@@ -12,6 +12,7 @@
     "@ascii-game/ui-ascii": "workspace:*",
     "@ascii-game/shared-types": "workspace:*",
     "@ascii-game/game-configs": "workspace:*",
+    "@ascii-game/core-math": "workspace:*",
     "@ascii-game/ascii-renderer": "workspace:*",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",

@@ -49,3 +49,4 @@ export interface IGameEngine<TState, TInput> {
   deserializeState(buffer: ArrayBuffer): TState;
 }
 export * from "./uno";
+export * from "./zombie";
