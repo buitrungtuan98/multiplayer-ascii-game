@@ -1,16 +1,16 @@
-# @ascii-game/game-logic-aoe
+# `@ascii-game/game-logic-aoe`
 
 ## Tổng quan
-Vai trò của folder này trong toàn hệ thống: (Cần bổ sung)
+Logic dành cho game RTS Age of Empires chạy chu kỳ Lockstep.
 
 ## Kiểu dữ liệu đặc thù
-(Cần bổ sung)
+(Cần bổ sung ở giai đoạn 5)
 
-## Tham số nghiệp vụ (Business Parameters)
-(Cần bổ sung)
+## Tham số nghiệp vụ
+(Cần bổ sung ở giai đoạn 5)
 
-## Hướng dẫn Kiểm thử cục bộ (Testing Guide)
-Chạy `pnpm test` để kiểm thử module này.
+## Hướng dẫn Kiểm thử cục bộ
+Chưa cần thiết.
 
-## Nhật ký thay đổi (Change Log)
-- Khởi tạo package.
+## Nhật ký thay đổi
+- Thiết lập thư mục rỗng chuẩn bị cho giai đoạn 5.

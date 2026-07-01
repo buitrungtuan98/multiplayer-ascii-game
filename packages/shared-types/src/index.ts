@@ -48,3 +48,4 @@ export interface IGameEngine<TState, TInput> {
   serializeState(state: TState): ArrayBuffer;
   deserializeState(buffer: ArrayBuffer): TState;
 }
+export * from "./uno";

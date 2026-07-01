@@ -9,7 +9,7 @@ const LOBBY_API_URL = process.env.NEXT_PUBLIC_LOBBY_API_URL || 'http://localhost
 const LOBBY_WS_URL = process.env.NEXT_PUBLIC_LOBBY_WS_URL || 'ws://localhost:8080';
 
 export default function Lobby({ params }: { params: { gameId: string } }) {
-  const [playerName, setPlayerName] = useState('Guest_' + Math.floor(Math.random() * 9999));
+  const [playerName, setPlayerName] = useState('Guest_' + (Date.now() % 9999));
   const [roomType, setRoomType] = useState<'PUBLIC' | 'PRIVATE'>('PUBLIC');
   const [blink, setBlink] = useState(true);
   const [publicRooms, setPublicRooms] = useState<RoomMetadata[]>([]);

@@ -34,34 +34,23 @@ const server = serve<SocketData>({
   websocket: {
     async open(ws) {
       socketManager.handleJoin(ws);
-      const { roomId } = ws.data;
+      const { roomId, playerId } = ws.data;
 
-      // Load or init state
       let state = activeRooms.get(roomId);
       if (!state) {
-        // Try pull from Redis
         const redisState = await socketManager.pullStateFromRedis(roomId);
         if (redisState) {
            state = redisState as UnoGameState;
         } else {
-           // Init new game
            state = engine.initialize({ roomId, gameId: 'uno', maxPlayers: 10, seed: 12345 });
         }
         activeRooms.set(roomId, state);
       }
 
-      // Add player if not exists
-      if (!state.players.find(p => p.playerId === ws.data.playerId)) {
-         state.players.push({ playerId: ws.data.playerId, hand: [] });
-         // Give 7 cards
-         for(let i=0; i<7; i++) {
-            if(state.drawPile.length > 0) {
-               state.players[state.players.length-1].hand.push(state.drawPile.pop()!);
-            }
-         }
-         if (state.players.length > 1 && state.status === 'WAITING') {
-            state.status = 'PLAYING';
-         }
+      // Pass pure ACT_JOIN input to game engine instead of modifying state here
+      if (engine.validateInput({ playerId, username: '' }, { type: 'ACT_JOIN', playerId }, state)) {
+         state = engine.update(state, [{ type: 'ACT_JOIN', playerId }], 0);
+         activeRooms.set(roomId, state);
       }
 
       await socketManager.pushStateToRedis(roomId, state);
@@ -73,8 +62,7 @@ const server = serve<SocketData>({
         const input = JSON.parse(message as string) as UnoInput;
         let state = activeRooms.get(roomId);
         if (state) {
-           // Validate & Update
-           if (engine.validateInput({ playerId, username: 'Unknown' }, input, state)) {
+           if (engine.validateInput({ playerId, username: '' }, input, state)) {
               state = engine.update(state, [input], 0);
               activeRooms.set(roomId, state);
               await socketManager.pushStateToRedis(roomId, state);

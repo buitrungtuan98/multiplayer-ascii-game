@@ -64,6 +64,9 @@ importers:
 
   apps/web-portal:
     dependencies:
+      '@ascii-game/ascii-renderer':
+        specifier: workspace:*
+        version: link:../../packages/ascii-renderer
       '@ascii-game/game-configs':
         specifier: workspace:*
         version: link:../../packages/game-configs
@@ -99,7 +102,11 @@ importers:
         specifier: ^4.0.0
         version: 4.3.2
 
-  packages/ascii-renderer: {}
+  packages/ascii-renderer:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
 
   packages/core-math: {}
 

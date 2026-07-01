@@ -84,3 +84,4 @@ export class AsciiRenderer {
     }
   }
 }
+export * from "./uno/UnoSpriteCache";

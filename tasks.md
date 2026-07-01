@@ -14,6 +14,7 @@
 - [Done] Xây dựng `apps/game-lobby` (Bun.js WebSocket/HTTP Server)
 - [Done] Tích hợp `apps/game-lobby` với `apps/web-portal` (Kết nối Data/API thực)
 - [Done] Khởi tạo Worker `apps/game-servers/game-uno`
+- [Done] Xây dựng màn hình Canvas Frontend (Game UNO Client)
 
 ### 3. Tối ưu hóa & Hạ tầng (Infra & Optimization)
 - [Done] Thiết lập kết nối Redis Engine (ioredis/native) cho Worker
