@@ -2,10 +2,9 @@ version: '3.8'
 
 networks:
   game-internal-net:
-    driver: bridge # Mạng nội bộ khép kín hoàn toàn, không publish port ra ngoài máy chủ Host để tránh quét cổng
+    driver: bridge
 
 services:
-  # Cloudflare Tunnel 1 - Trực tiếp định tuyến dữ liệu & ẩn giấu IP của VPS (Chạy trên Core 0, 1)
   cf-tunnel-1:
     image: cloudflare/cloudflared:latest
     container_name: cf-tunnel-1
@@ -19,7 +18,6 @@ services:
     depends_on:
       - nginx-gateway
 
-  # Cloudflare Tunnel 2 - Load Balancing tăng tốc truy cập (Chạy trên Core 2, 3)
   cf-tunnel-2:
     image: cloudflare/cloudflared:latest
     container_name: cf-tunnel-2
@@ -33,11 +31,10 @@ services:
     depends_on:
       - nginx-gateway
 
-  # Nginx Gateway - Định tuyến giao tiếp & quản lý kết nối SSL/WSS nội bộ
   nginx-gateway:
     image: nginx:alpine
     container_name: nginx-gateway
-    cpuset: "1" # Chia sẻ core 1 với Next.js App
+    cpuset: "1"
     restart: always
     volumes:
       - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
@@ -48,8 +45,8 @@ services:
       - game-worker-1
       - game-worker-2
       - game-worker-3
+      - game-worker-4
 
-  # Next.js Landing Page & Web Portal (Chỉ định chạy ở Core 1)
   home-app:
     image: ascii-game-home:latest
     container_name: ascii-home
@@ -58,7 +55,6 @@ services:
     networks:
       - game-internal-net
 
-  # Bun Game Worker 1 (UNO) - (Chỉ định chạy độc quyền ở Core 2)
   game-worker-1:
     image: ascii-game-server:latest
     container_name: ascii-game-worker-1
@@ -72,7 +68,6 @@ services:
     depends_on:
       - redis-state-engine
 
-  # Bun Game Worker 2 (ZOMBIE) - (Chỉ định chạy độc quyền ở Core 3)
   game-worker-2:
     image: ascii-game-server:latest
     container_name: ascii-game-worker-2
@@ -86,7 +81,6 @@ services:
     depends_on:
       - redis-state-engine
 
-  # Bun Game Worker 3 (AoE) - (Chia sẻ Core 2)
   game-worker-3:
     image: ascii-game-server:latest
     container_name: ascii-game-worker-3
@@ -100,12 +94,37 @@ services:
     depends_on:
       - redis-state-engine
 
-  # Redis Engine - In-Memory State Cache (Chỉ định chạy độc quyền ở Core 0)
+  game-worker-4:
+    image: ascii-game-server:latest
+    container_name: ascii-game-worker-4
+    cpuset: "3"
+    restart: always
+    environment:
+      - WORKER_PORT=8084
+      - REDIS_URL=redis://redis-state-engine:6379
+    networks:
+      - game-internal-net
+    depends_on:
+      - redis-state-engine
+
   redis-state-engine:
     image: redis:alpine
     container_name: redis-state
     cpuset: "0"
     restart: always
-    command: redis-server --save "" --appendonly no # Tắt hoàn toàn Disk I/O để tối ưu hóa RAM, loại bỏ thắt nút cổ chai ổ cứng
+    command: redis-server --save "" --appendonly no
     networks:
       - game-internal-net
+  # Game Lobby Server
+  game-lobby:
+    image: ascii-game-lobby:latest
+    container_name: game-lobby
+    cpuset: "1"
+    restart: always
+    environment:
+      - PORT=8080
+      - REDIS_URL=redis://redis-state-engine:6379
+    networks:
+      - game-internal-net
+    depends_on:
+      - redis-state-engine

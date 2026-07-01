@@ -5,8 +5,8 @@ import { Terminal, Globe, Server, Lock } from 'lucide-react';
 import { AsciiBox, AsciiButton } from '@ascii-game/ui-ascii';
 import { RoomMetadata } from '@ascii-game/shared-types';
 
-const LOBBY_API_URL = process.env.NEXT_PUBLIC_LOBBY_API_URL || 'http://localhost:8080';
-const LOBBY_WS_URL = process.env.NEXT_PUBLIC_LOBBY_WS_URL || 'ws://localhost:8080';
+const LOBBY_API_URL = process.env.NEXT_PUBLIC_LOBBY_API_URL || '/api-lobby';
+const LOBBY_WS_URL = process.env.NEXT_PUBLIC_LOBBY_WS_URL || 'wss://${window.location.host}/api-lobby/ws';
 
 export default function Lobby({ params }: { params: { gameId: string } }) {
   const [playerName, setPlayerName] = useState('Guest_' + (Date.now() % 9999));

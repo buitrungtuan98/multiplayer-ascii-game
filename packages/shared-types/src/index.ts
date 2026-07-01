@@ -51,3 +51,4 @@ export interface IGameEngine<TState, TInput> {
 export * from "./uno";
 export * from "./zombie";
 export * from "./aoe";
+export * from "./starcraft";

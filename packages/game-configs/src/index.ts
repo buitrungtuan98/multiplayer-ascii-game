@@ -10,6 +10,16 @@ export interface GameRegistryConfig {
 }
 
 export const GlobalGameRegistry: Record<string, GameRegistryConfig> = {
+  "starcraft-1": {
+    gameId: "starcraft-1",
+    gameTitle: "StarCraft ASCII Edition",
+    gameType: "LOCKSTEP_REALTIME",
+    tickRateHz: 15,
+    maxPlayers: 8,
+    maxRoomsAllowed: 1000,
+    mapDimensions: { x: 120000, y: 120000 },
+    balanceSheet: {}
+  },
   "uno": {
     gameId: "uno",
     gameTitle: "ASCII Uno Boardgame",

@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { AsciiRenderer } from '@ascii-game/ascii-renderer';
-import { UnoSpriteCache, ZombieSpriteCache, AoeSpriteCache } from '@ascii-game/ascii-renderer';
-import { UnoGameState, ZombieGameState, AoeGameState } from '@ascii-game/shared-types';
+import { UnoSpriteCache, ZombieSpriteCache, AoeSpriteCache, ScSpriteCache } from '@ascii-game/ascii-renderer';
+import { UnoGameState, ZombieGameState, AoeGameState, ScGameState } from '@ascii-game/shared-types';
 import { FixedPoint, LerpMath, IsometricMath, Vector2 } from '@ascii-game/core-math';
 
 export default function JoinRoom({ params }: { params: { roomCode: string } }) {
@@ -14,11 +14,12 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
   const [gameStateUno, setGameStateUno] = useState<UnoGameState | null>(null);
   const [gameStateZombie, setGameStateZombie] = useState<ZombieGameState | null>(null);
   const [gameStateAoe, setGameStateAoe] = useState<AoeGameState | null>(null);
+  const [gameStateSc, setGameStateSc] = useState<ScGameState | null>(null);
 
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [statusText, setStatusText] = useState('ĐANG KẾT NỐI TỚI GAME WORKER...');
 
-  const gameType = useRef<'uno'|'zombie'|'aoe'>('uno');
+  const gameType = useRef<'uno'|'zombie'|'aoe'|'sc'>('uno');
 
   const prevStateRef = useRef<any>(null);
   const targetStateRef = useRef<any>(null);
@@ -54,9 +55,9 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
     let workerPort = '8081';
     if (gt === 'zombie-invasion') { gameType.current = 'zombie'; workerPort = '8082'; }
     else if (gt === 'aoe-1') { gameType.current = 'aoe'; workerPort = '8083'; }
+    else if (gt === 'starcraft-1') { gameType.current = 'sc'; workerPort = '8084'; }
     else { gameType.current = 'uno'; workerPort = '8081'; }
 
-    // Fallback if local override provided
     const urlPort = urlParams.get('workerPort');
     if (urlPort) workerPort = urlPort;
 
@@ -104,6 +105,28 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
                  }
                  rendererRef.current.setBackgroundDirty(false);
               }
+           } else if (gameType.current === 'sc') {
+              prevStateRef.current = targetStateRef.current || data.state;
+              targetStateRef.current = data.state;
+              lerpStartMs.current = performance.now();
+              setGameStateSc(data.state);
+              setStatusText(\`STARCRAFT UNIVERSE | Ticks: \${data.tick}\`);
+
+              if (rendererRef.current && rendererRef.current.getBackgroundDirty()) {
+                 rendererRef.current.clearBackground();
+                 const bgCtx = rendererRef.current.getBackgroundContext();
+                 bgCtx.fillStyle = '#010108'; // Nền không gian tối hơn
+                 bgCtx.fillRect(0, 0, 800, 600);
+
+                 const tempVec = new Vector2();
+                 for (let x = 0; x < 20; x++) {
+                    for (let y = 0; y < 20; y++) {
+                       IsometricMath.toScreen(FixedPoint.fromFloat(x), FixedPoint.fromFloat(y), tempVec);
+                       rendererRef.current.drawSpriteToBackground('ISO_SPACE', tempVec.x + 400, tempVec.y + 100);
+                    }
+                 }
+                 rendererRef.current.setBackgroundDirty(false);
+              }
            }
         }
       } catch(e) {}
@@ -124,8 +147,11 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
     } else if (gameType.current === 'zombie') {
       cacheRef.current = new ZombieSpriteCache(rendererRef.current.getCache());
       cacheRef.current.preRenderAll();
-    } else {
+    } else if (gameType.current === 'aoe') {
       cacheRef.current = new AoeSpriteCache(rendererRef.current.getCache());
+      cacheRef.current.preRenderAll();
+    } else {
+      cacheRef.current = new ScSpriteCache(rendererRef.current.getCache());
       cacheRef.current.preRenderAll();
     }
   }, []);
@@ -217,7 +243,7 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
             });
          }
       }
-      else {
+      else if (gameType.current === 'aoe') {
          if (prevStateRef.current && targetStateRef.current && cacheRef.current) {
             renderer.clearForeground();
             const elapsedMs = performance.now() - lerpStartMs.current;
@@ -253,13 +279,66 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
             });
          }
       }
+      else if (gameType.current === 'sc') {
+         if (prevStateRef.current && targetStateRef.current && cacheRef.current) {
+            renderer.clearForeground();
+            const elapsedMs = performance.now() - lerpStartMs.current;
+            const tLerp = Math.min(1000, Math.floor((elapsedMs / 66.6) * 1000));
+            const prev = prevStateRef.current as ScGameState;
+            const target = targetStateRef.current as ScGameState;
+            const ctx = canvas.getContext('2d')!;
+            const camX = 400;
+            const camY = 100;
+
+            // Đảm bảo đơn vị bay (MUTALISK) được vẽ sau cùng (Layering cơ bản bằng cách sắp xếp theo Y hoặc type)
+            const sortedEntities = [...target.entities].sort((a, b) => {
+               if (a.type === 'MUTALISK' && b.type !== 'MUTALISK') return 1;
+               if (b.type === 'MUTALISK' && a.type !== 'MUTALISK') return -1;
+               return a.y - b.y;
+            });
+
+            sortedEntities.forEach(entTarget => {
+               const entPrev = prev.entities.find(e => e.id === entTarget.id);
+               let drawXFixed = entTarget.x;
+               let drawYFixed = entTarget.y;
+               if (entPrev) {
+                  drawXFixed = LerpMath.lerpFixed(entPrev.x, entTarget.x, tLerp);
+                  drawYFixed = LerpMath.lerpFixed(entPrev.y, entTarget.y, tLerp);
+               }
+               IsometricMath.toScreen(drawXFixed, drawYFixed, tempVec);
+
+               // Hiệu ứng đổ bóng (Drop shadow) cho lính bay (Z-axis offset)
+               if (entTarget.type === 'MUTALISK') {
+                  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                  ctx.beginPath();
+                  ctx.ellipse(tempVec.x + camX + 20, tempVec.y + camY + 40, 15, 5, 0, 0, Math.PI * 2);
+                  ctx.fill();
+                  // Thêm độ cao Z cho Mutalisk
+                  tempVec.y -= 30;
+               }
+
+               renderer.drawSprite(entTarget.type, tempVec.x + camX, tempVec.y + camY);
+               if (selectedEntityId.current === entTarget.id) {
+                  ctx.strokeStyle = '#FFFFFF';
+                  ctx.strokeRect(tempVec.x + camX, tempVec.y + camY, 40, 40);
+               }
+               if (entTarget.ownerId === playerId) {
+                  ctx.fillStyle = '#33FF33';
+               } else {
+                  ctx.fillStyle = '#FF3333';
+               }
+               ctx.font = '10px "JetBrains Mono"';
+               ctx.fillText(\`[\${entTarget.type}]\`, tempVec.x + camX, tempVec.y + camY - 10);
+            });
+         }
+      }
 
       animationFrameId = requestAnimationFrame(loop);
     };
 
     loop(performance.now());
     return () => cancelAnimationFrame(animationFrameId);
-  }, [gameStateUno, gameStateAoe, gameStateZombie, playerId, params.roomCode]);
+  }, [gameStateUno, gameStateAoe, gameStateZombie, gameStateSc, playerId, params.roomCode]);
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
@@ -281,8 +360,8 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
 
-            if (gameType.current === 'aoe') {
-               const targetState = targetStateRef.current as AoeGameState;
+            if (gameType.current === 'aoe' || gameType.current === 'sc') {
+               const targetState = (gameType.current === 'aoe' ? targetStateRef.current as AoeGameState : targetStateRef.current as ScGameState);
                if (!targetState) return;
 
                const camX = 400; const camY = 100;
@@ -304,8 +383,10 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
                let found = false;
                for (const ent of targetState.entities) {
                   IsometricMath.toScreen(ent.x, ent.y, tempVec);
+                  // Adjust Z-axis hit box for flyers
+                  const zOffset = 'type' in ent && ent.type === 'MUTALISK' ? 30 : 0;
                   const entScreenX = tempVec.x + camX;
-                  const entScreenY = tempVec.y + camY;
+                  const entScreenY = tempVec.y + camY - zOffset;
 
                   if (clickX >= entScreenX && clickX <= entScreenX + 40 && clickY >= entScreenY && clickY <= entScreenY + 40) {
                       if (ent.ownerId === playerId) {

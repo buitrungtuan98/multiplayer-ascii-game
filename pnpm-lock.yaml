@@ -136,6 +136,15 @@ importers:
         specifier: workspace:*
         version: link:../shared-types
 
+  packages/game-logic-starcraft:
+    dependencies:
+      '@ascii-game/core-math':
+        specifier: workspace:*
+        version: link:../core-math
+      '@ascii-game/shared-types':
+        specifier: workspace:*
+        version: link:../shared-types
+
   packages/game-logic-uno:
     dependencies:
       '@ascii-game/core-math':

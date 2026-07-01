@@ -116,3 +116,5 @@ export class AsciiRenderer {
 export * from "./uno/UnoSpriteCache";
 export * from "./zombie/ZombieSpriteCache";
 export * from "./aoe/AoeSpriteCache";
+export * from "./sc/ScSpriteCache";
+export * from "./sc/ScSpriteCache";
