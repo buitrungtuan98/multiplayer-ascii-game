@@ -36,6 +36,11 @@ setInterval(() => {
 serve<SocketData>({
   port: PORT,
   fetch(req, server) {
+      if (req.url.endsWith("/metrics")) {
+        return new Response(PrometheusExporter.getMetrics(), {
+          headers: { "Content-Type": "text/plain" },
+        });
+      }
     const url = new URL(req.url);
     if (url.pathname.startsWith("/ws-connect")) {
       const roomId = url.searchParams.get("room");
@@ -50,6 +55,7 @@ serve<SocketData>({
   },
   websocket: {
     open(ws) {
+          PrometheusExporter.metrics.game_connected_players++;
       socketManager.handleJoin(ws);
       const { roomId, playerId } = ws.data;
 
@@ -86,6 +92,7 @@ serve<SocketData>({
       } catch (e) {}
     },
     close(ws) {
+          PrometheusExporter.metrics.game_connected_players--;
       socketManager.handleLeave(ws);
     }
   }

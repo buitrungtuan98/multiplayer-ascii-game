@@ -52,3 +52,15 @@ export * from "./uno";
 export * from "./zombie";
 export * from "./aoe";
 export * from "./starcraft";
+export interface ChecksumPayload {
+  cmd: "STATE_CHECKSUM";
+  playerId: string;
+  tick: number;
+  hash: number;
+}
+
+export interface DesyncWarningPayload {
+  type: "DESYNC_DETECTED";
+  targetTick: number;
+  snapshotBuffer?: ArrayBuffer;
+}

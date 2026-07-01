@@ -244,3 +244,4 @@ export class IsometricMath {
      outVec.y = FixedPoint.fromFloat(gridYFloat);
   }
 }
+export * from "./FNV1a";
