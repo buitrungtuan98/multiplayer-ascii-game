@@ -115,3 +115,16 @@ services:
     command: redis-server --save "" --appendonly no
     networks:
       - game-internal-net
+  # Game Lobby Server
+  game-lobby:
+    image: ascii-game-lobby:latest
+    container_name: game-lobby
+    cpuset: "1"
+    restart: always
+    environment:
+      - PORT=8080
+      - REDIS_URL=redis://redis-state-engine:6379
+    networks:
+      - game-internal-net
+    depends_on:
+      - redis-state-engine

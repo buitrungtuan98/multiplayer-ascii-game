@@ -65,7 +65,7 @@ export default function Home() {
             {games.map((game) => (
               <AsciiBox
                 key={game.id}
-                onClick={() => window.location.href=`http://localhost:3001/lobby/${game.id}`}
+                onClick={() => window.location.href=`/lobby/${game.id}`}
               >
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 group-hover:text-[#33FF33] transition-all transform group-hover:scale-110">
                   <Gamepad2 size={80} />
