@@ -1,0 +1,13 @@
+{
+  "name": "@ascii-game/ascii-renderer",
+  "version": "1.0.0",
+  "description": "Engine kết xuất Canvas 2D ASCII (Sprite Caching, Pure GPU)",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

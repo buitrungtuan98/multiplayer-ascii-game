@@ -1,0 +1,13 @@
+node_modules/
+.next/
+dist/
+build/
+.env
+.DS_Store
+*.log
+.turbo/
+
+# Playwright Logs
+*.log
+*.pid
+verification/

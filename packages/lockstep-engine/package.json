@@ -1,0 +1,9 @@
+{
+  "name": "@ascii-game/lockstep-engine",
+  "version": "1.0.0",
+  "description": "Khung logic chạy tick loop, nhận State cũ trả ra State mới, hỗ trợ FNV-1a Hash.",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/"
+  }
+}

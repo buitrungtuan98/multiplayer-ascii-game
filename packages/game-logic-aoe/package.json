@@ -1,0 +1,13 @@
+{
+  "name": "@ascii-game/game-logic-aoe",
+  "version": "1.0.0",
+  "description": "Engine Game RTS Age of Empires (15Hz Lockstep)",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/core-math": "workspace:*"
+  }
+}

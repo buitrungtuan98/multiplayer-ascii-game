@@ -1,0 +1,13 @@
+{
+  "name": "@ascii-game/game-logic-uno",
+  "version": "1.0.0",
+  "description": "Luật chơi bài UNO theo kiến trúc Finite State Machine (0Hz)",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/core-math": "workspace:*"
+  }
+}

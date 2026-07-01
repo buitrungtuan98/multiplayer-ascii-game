@@ -1,0 +1,17 @@
+{
+  "name": "game-server-zombie",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Worker chạy Lockstep 30Hz cho Game Zombie",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch src/index.ts"
+  },
+  "dependencies": {
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/game-configs": "workspace:*",
+    "@ascii-game/game-logic-zombie": "workspace:*",
+    "@ascii-game/core-socket": "workspace:*",
+    "ioredis": "^5.3.2"
+  }
+}

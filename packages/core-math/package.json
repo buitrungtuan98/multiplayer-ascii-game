@@ -1,0 +1,9 @@
+{
+  "name": "@ascii-game/core-math",
+  "version": "1.0.0",
+  "description": "Thư viện toán học Fixed-Point và PRNG (No Float Policy)",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint src/"
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "extends": ["next", "@ascii-game/eslint-config"]
+}
