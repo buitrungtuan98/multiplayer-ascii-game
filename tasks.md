@@ -10,6 +10,9 @@
 - [Done] Khởi tạo `apps/game-servers/core-socket` (Lõi quản lý WebSocket Handshake)
 - [Done] Bổ sung `core-math` (Flow Field Pathfinding, Lerp Fixed-Point)
 - [Done] Khởi tạo `packages/game-logic-zombie` (Zombie Logic & State)
+- [Done] Bổ sung `core-math` (Isometric Math)
+- [Done] Nâng cấp `ascii-renderer` (Background Layer, Bounding Box)
+- [Done] Xây dựng `packages/game-logic-aoe` (Lockstep 15Hz)
 
 ### 2. Ứng dụng (Apps Integration)
 - [Done] Khởi tạo Monorepo Next.js + CSS CRT (Trang Chủ & UI Prototype)
@@ -19,6 +22,8 @@
 - [Done] Xây dựng màn hình Canvas Frontend (Game UNO Client)
 - [Done] Khởi tạo Worker `apps/game-servers/game-zombie` (30Hz Lockstep)
 - [Done] Tích hợp Client Render Game Zombie (60FPS Interpolation & Flow Field Animation)
+- [Done] Khởi tạo Worker `apps/game-servers/game-rts-aoe` (15Hz Lockstep)
+- [Done] Tích hợp Client Render Game AoE (Isometric 2.5D, Chuột)
 
 ### 3. Tối ưu hóa & Hạ tầng (Infra & Optimization)
 - [Done] Thiết lập kết nối Redis Engine (ioredis/native) cho Worker

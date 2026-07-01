@@ -203,3 +203,44 @@ export class LerpMath {
      );
   }
 }
+
+// ==========================================
+// TOÁN HỌC ISOMETRIC 2.5D
+// ==========================================
+export class IsometricMath {
+  public static tileWidth: number = 64; // Ví dụ: Kích thước Tile trên màn hình (Pixels)
+  public static tileHeight: number = 32;
+
+  /**
+   * Chuyển đổi Tọa độ lưới phẳng (Fixed-Point) sang Tọa độ màn hình 2.5D (Pixels)
+   * Sử dụng công thức từ tài liệu kiến trúc.
+   */
+  public static toScreen(gridXFixed: number, gridYFixed: number, outVec: Vector2): void {
+     const xFloat = FixedPoint.toFloat(gridXFixed);
+     const yFloat = FixedPoint.toFloat(gridYFixed);
+
+     // ScreenX = (X - Y) * (TileWidth / 2)
+     outVec.x = (xFloat - yFloat) * (this.tileWidth / 2);
+     // ScreenY = (X + Y) * (TileHeight / 2)
+     outVec.y = (xFloat + yFloat) * (this.tileHeight / 2);
+  }
+
+  /**
+   * Chuyển đổi Tọa độ màn hình (Pixels) ngược về Tọa độ lưới phẳng (Fixed-Point)
+   * Phục vụ cho tính năng Click chuột để chọn lính/đất.
+   */
+  public static toGrid(screenX: number, screenY: number, outVec: Vector2): void {
+     // Đảo ngược ma trận:
+     // X = (ScreenX / (TileWidth/2) + ScreenY / (TileHeight/2)) / 2
+     // Y = (ScreenY / (TileHeight/2) - ScreenX / (TileWidth/2)) / 2
+
+     const halfW = this.tileWidth / 2;
+     const halfH = this.tileHeight / 2;
+
+     const gridXFloat = (screenX / halfW + screenY / halfH) / 2;
+     const gridYFloat = (screenY / halfH - screenX / halfW) / 2;
+
+     outVec.x = FixedPoint.fromFloat(gridXFloat);
+     outVec.y = FixedPoint.fromFloat(gridYFloat);
+  }
+}

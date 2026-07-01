@@ -91,4 +91,4 @@ serve<SocketData>({
   }
 });
 
-console.log(`JSON Log: {"timestamp": "${new Date().toISOString()}", "service": "game-zombie", "level": "INFO", "message": "Zombie Worker started on port ${PORT}"}\`);
+console.log(`JSON Log: {"timestamp": "${new Date().toISOString()}", "service": "game-zombie", "level": "INFO", "message": "Zombie Worker started on port ${PORT}"}`);

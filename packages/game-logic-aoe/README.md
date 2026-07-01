@@ -1,16 +1,15 @@
 # `@ascii-game/game-logic-aoe`
 
 ## Tổng quan
-Logic dành cho game RTS Age of Empires chạy chu kỳ Lockstep.
+Game RTS Age of Empires 1. Chạy Lockstep Rate 15Hz (66.6ms). Hỗ trợ logic khai thác tài nguyên và di chuyển Isometric.
 
 ## Kiểu dữ liệu đặc thù
-(Cần bổ sung ở giai đoạn 5)
+- `AoeGameState`, `AoeEntity`
+- `AoeInput`: Phân biệt `MOVE_ENTITY` và `ATTACK_ENTITY`.
 
 ## Tham số nghiệp vụ
-(Cần bổ sung ở giai đoạn 5)
-
-## Hướng dẫn Kiểm thử cục bộ
-Chưa cần thiết.
+- Tick Rate: 15Hz.
+- PRNG khởi tạo vị trí cây cối.
 
 ## Nhật ký thay đổi
-- Thiết lập thư mục rỗng chuẩn bị cho giai đoạn 5.
+- Xây dựng AoeGameEngine và Logic Physics Fixed-Point.

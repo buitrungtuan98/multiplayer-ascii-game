@@ -1,12 +1,17 @@
 {
-  "name": "game-rts-aoe",
+  "name": "game-server-rts-aoe",
   "version": "1.0.0",
   "private": true,
+  "description": "Engine điều phối phòng chơi AoE/StarCraft ASCII (15Hz)",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "bun run src/index.ts",
-    "start": "bun run src/index.ts"
+    "dev": "bun --watch src/index.ts"
   },
   "dependencies": {
-    "@ascii-game/shared-types": "workspace:*"
+    "@ascii-game/shared-types": "workspace:*",
+    "@ascii-game/game-configs": "workspace:*",
+    "@ascii-game/game-logic-aoe": "workspace:*",
+    "@ascii-game/core-socket": "workspace:*",
+    "ioredis": "^5.3.2"
   }
 }
