@@ -42,8 +42,8 @@ export const GlobalGameRegistry: Record<string, GameRegistryConfig> = {
     maxRoomsAllowed: 500,
     mapDimensions: { x: 50000, y: 50000 },
     balanceSheet: {
-      maxZombiesCount: 10000,
-      heroMoveSpeed: 1500,
+      maxZombiesCount: 5000, // Optimized for client rendering
+      heroMoveSpeed: 2000,
       zombieSpawnIntervalMs: 5000,
     }
   },
@@ -57,7 +57,7 @@ export const GlobalGameRegistry: Record<string, GameRegistryConfig> = {
     mapDimensions: { x: 120000, y: 120000 },
     balanceSheet: {
       villagerGatherRate: 100,
-      clubmanHealth: 45000,
+      clubmanHealth: 50000,
       clubmanAttack: 3000,
     }
   }

@@ -35,6 +35,7 @@ jobs:
 
     - name: Run Tests (Bun)
       run: pnpm test
+    - name: Run E2E Tests (Playwright)\n      run: cd apps/web-portal && pnpm exec playwright install --with-deps && pnpm exec playwright test
 
     - name: Build Monorepo (Turborepo)
       run: pnpm run build

@@ -9,7 +9,7 @@ export class ScSpriteCache {
     this.canvasMap.set("MARINE", this.createSprite(marineStr));
 
     // Cache Mutalisk
-    const mutaStr = " \\~\\_O\n  \\_/";
+    const mutaStr = "  \~\_O>\n <_/";
     this.canvasMap.set("MUTALISK", this.createSprite(mutaStr));
   }
 
