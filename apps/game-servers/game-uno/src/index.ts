@@ -14,6 +14,11 @@ const activeRooms: Map<string, UnoGameState> = new Map();
 const server = serve<SocketData>({
   port: PORT,
   fetch(req, server) {
+      if (req.url.endsWith("/metrics")) {
+        return new Response(PrometheusExporter.getMetrics(), {
+          headers: { "Content-Type": "text/plain" },
+        });
+      }
     const url = new URL(req.url);
     if (url.pathname.startsWith("/ws-connect")) {
       const roomId = url.searchParams.get("room");
@@ -33,6 +38,7 @@ const server = serve<SocketData>({
   },
   websocket: {
     async open(ws) {
+          PrometheusExporter.metrics.game_connected_players++;
       socketManager.handleJoin(ws);
       const { roomId, playerId } = ws.data;
 
@@ -74,6 +80,7 @@ const server = serve<SocketData>({
       }
     },
     close(ws) {
+          PrometheusExporter.metrics.game_connected_players--;
       socketManager.handleLeave(ws);
     },
   },
