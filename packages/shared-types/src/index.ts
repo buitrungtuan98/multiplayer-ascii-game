@@ -64,3 +64,14 @@ export interface DesyncWarningPayload {
   targetTick: number;
   snapshotBuffer?: ArrayBuffer;
 }
+
+export interface ReconnectRequestPayload {
+  cmd: "REQ_RECONNECT";
+  playerId: string;
+}
+
+export interface CatchupPayload {
+  type: "CATCH_UP_STATE";
+  snapshot: any;
+  tickHistory: { tick: number; inputs: any[] }[];
+}
