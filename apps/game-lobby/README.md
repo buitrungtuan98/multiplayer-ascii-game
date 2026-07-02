@@ -1,13 +1,20 @@
-# `game-lobby`
+# Game Lobby Service
 
-## Tổng quan
-Cổng điều hướng WebSocket và HTTP API cho Sảnh chờ (Lobby).
-Nhiệm vụ chính:
-- Nhận lệnh tạo phòng từ Client, ghi thông tin vào Redis.
-- Lắng nghe sự thay đổi phòng (Lobby Updates) qua Redis Pub/Sub và broadcast qua WebSocket về Client đang duyệt danh sách phòng.
+## 1. Tổng quan
+Cổng điều hướng WebSocket (Gateway) chạy bằng Bun.js. Quản lý danh sách các phòng chờ và thực hiện Matchmaking động dựa trên truy vấn load balancing qua Redis.
 
-## Tham số nghiệp vụ
-Chạy cổng mặc định 8080 (hoặc qua `process.env.PORT`).
+## 2. Kiểu dữ liệu đặc thù
+Không khai báo thêm, sử dụng chung từ `shared-types` (ví dụ `RoomMetadata`).
 
-## Cấu trúc Log
-Tuân thủ rule JSON stdout logging.
+## 3. Tham số nghiệp vụ
+- Khởi chạy ở cổng `8080`.
+- Nhận diện `active_workers` từ Redis để phân bổ phòng cho worker rảnh rỗi nhất.
+
+## 4. Hướng dẫn Kiểm thử cục bộ
+```bash
+bun run src/index.ts
+```
+Yêu cầu phải có Redis Server chạy nền.
+
+## 5. Nhật ký thay đổi
+- Chuyển đổi định tuyến tĩnh sang định tuyến động đa Node (Worker Self-Registration).

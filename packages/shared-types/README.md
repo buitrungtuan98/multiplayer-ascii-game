@@ -1,14 +1,20 @@
-# `@ascii-game/shared-types`
+# Shared Types (Single Source of Truth)
 
-## Tổng quan
-Single Source of Truth (Nguồn chân lý duy nhất) cho toàn bộ Interface, Type và Dữ liệu truyền tải mạng trong dự án ASCII Multiplayer Game Universe.
+## 1. Tổng quan
+Đóng vai trò là Nguồn Chân Lý Duy Nhất (Single Source of Truth) cho toàn bộ cấu trúc dữ liệu, các Interface trao đổi mạng và State Schema của tất cả trò chơi trong vũ trụ ASCII.
 
-## Kiểu dữ liệu đặc thù
-- `RoomMetadata`: Chứa thông tin phòng ở sảnh chờ, bao gồm `workerPort` phục vụ định tuyến động.
-- `IGameEngine`: Interface bắt buộc đối với mọi loại game để tương thích với hệ thống Worker Lockstep.
+## 2. Kiểu dữ liệu đặc thù
+Tất cả các Types của hệ thống: `RoomMetadata`, `IGameEngine`, `ScGameState`, `AoeGameState`, `ZombieGameState`, `MoveCommandPayload`, `ChecksumPayload`, `CatchupPayload`.
 
-## Tham số nghiệp vụ
-Không có cấu hình trực tiếp ở đây, các config chuyển sang `game-configs`.
+## 3. Tham số nghiệp vụ
+- Khống chế không dùng Float trong mọi state định nghĩa ở đây.
 
-## Hướng dẫn Kiểm thử cục bộ
-Package này chỉ chứa TypeScript Interface, không cần Unit Test.
+## 4. Hướng dẫn Kiểm thử cục bộ
+Chỉ xuất các interface, không chứa logic, nên test bằng cách kiểm tra type check:
+```bash
+pnpm tsc --noEmit
+```
+
+## 5. Nhật ký thay đổi
+- Thêm `ChecksumPayload` và `DesyncWarningPayload` cho cơ chế đồng thuận Desync.
+- Bổ sung `CatchupPayload` và `REQ_RECONNECT` cho Reconnect Protocol.

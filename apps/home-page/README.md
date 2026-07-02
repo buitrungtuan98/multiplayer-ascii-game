@@ -1,16 +1,19 @@
-# `home-page`
+# Home Page SSG
 
-## Tổng quan
-Ứng dụng Trang chủ (Next.js) được xuất (SSG) để cung cấp Landing Page tĩnh cực nhanh cho người dùng. Thể hiện thẩm mỹ thuần ASCII Art/Terminal.
+## 1. Tổng quan
+Ứng dụng xây dựng bằng Next.js sử dụng kiến trúc Static Site Generation (SSG). Chịu trách nhiệm render các trang Landing Page, giới thiệu và điều hướng (Discovery) cho các game với phong cách ASCII UI. Không chứa logic game phức tạp.
 
-## Kiểu dữ liệu đặc thù
-- Không có kiểu dữ liệu riêng, chỉ sử dụng React Component.
+## 2. Kiểu dữ liệu đặc thù
+Không có.
 
-## Tham số nghiệp vụ
-- Ứng dụng tập trung 100% SEO, điểm lighthouse tuyệt đối, không gọi WebSocket trực tiếp.
+## 3. Tham số nghiệp vụ
+- Tốc độ tải trang mục tiêu TTFB < 50ms.
+- Hoàn thiện 100/100 Core Web Vitals.
 
-## Hướng dẫn Kiểm thử cục bộ
-Chạy lệnh `pnpm dev` từ thư mục này.
+## 4. Hướng dẫn Kiểm thử cục bộ
+```bash
+pnpm dev
+```
 
-## Nhật ký thay đổi
-- Khởi tạo Landing Page gốc.
+## 5. Nhật ký thay đổi
+- Sửa lỗi định tuyến cứng localhost sang URL tương đối để hoạt động với Nginx Gateway.

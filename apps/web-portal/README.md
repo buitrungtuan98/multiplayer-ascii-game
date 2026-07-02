@@ -1,17 +1,22 @@
-# `web-portal`
+# Web Portal Client
 
-## Tổng quan
-Ứng dụng Web Portal (Next.js) quản lý UI phức tạp: Lobby, Room Browser, và trang vào trận. Cung cấp bộ Container tích hợp Engine Game lên Browser qua HTML5 Canvas.
+## 1. Tổng quan
+Client ứng dụng chính xây dựng trên nền Next.js App Router. Phụ trách quản lý giao diện Lobby, khởi tạo kết nối WebSockets với các Worker Nodes, quản lý Jitter Buffer, và vẽ đồ họa game qua thẻ HTML5 Canvas (Foreground/Background).
 
-## Kiểu dữ liệu đặc thù
-- Kế thừa types mạng từ `shared-types`. Không định nghĩa riêng.
+## 2. Kiểu dữ liệu đặc thù
+Không có kiểu mới, mọi dữ liệu nhận về được mapping chặt chẽ qua package `shared-types`.
 
-## Tham số nghiệp vụ
-- Khởi tạo kết nối qua cổng API `8080` tới `game-lobby` và `8081+` cho các worker.
+## 3. Tham số nghiệp vụ
+- Render Frame Rate: 60Hz.
+- Jitter Buffer length: 3 ticks (Hấp thụ lag mạng).
+- Checksum Rate: 150 ticks.
 
-## Hướng dẫn Kiểm thử cục bộ
-Chạy lệnh `pnpm dev --port 3001` và mock WebSocket test nếu cần.
+## 4. Hướng dẫn Kiểm thử cục bộ
+Chạy ở cổng 3001 trong dev mode:
+```bash
+pnpm dev
+```
 
-## Nhật ký thay đổi
-- Chỉnh sửa tích hợp trang Lobby.
-- Tích hợp HTML5 Canvas Render UNO game.
+## 5. Nhật ký thay đổi
+- Chuyển JSON string payload sang `ArrayBuffer` sử dụng `BinaryEncoder`.
+- Tích hợp logic Catch-up khi nhận cờ `DESYNC_DETECTED`.
