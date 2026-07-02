@@ -73,6 +73,11 @@ export default function JoinRoom({ params }: { params: { roomCode: string } }) {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        if (data.type === "DESYNC_DETECTED") {
+          console.error("Desync detected at tick:", data.targetTick);
+          // TODO: Implement Catch-up logic here by fetching snapshot from Redis
+          return;
+        }
         if (data.type === 'STATE_UPDATE' || data.type === 'STATE_SYNC') {
            if (gameType.current === 'uno') {
               setGameStateUno(data.state);
