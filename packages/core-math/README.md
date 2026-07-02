@@ -1,19 +1,22 @@
-# `@ascii-game/core-math`
+# Core Math Logic
 
-## Tổng quan
-Thư viện toán học nền tảng cho Game Logic. Tuân thủ tuyệt đối "No Float Policy" (Cấm số thực) và "Zero-Allocation Policy" (Tái sử dụng object bằng Pool).
+## 1. Tổng quan
+Thư viện toán học dùng chung cho toàn bộ "ASCII MULTIPLAYER GAME UNIVERSE". Nó cung cấp các tính năng toán học số nguyên cố định (Fixed-Point Math) để tránh Desync, thuật toán PRNG tất định, bộ nội suy đồ họa Isometric, thuật toán băm FNV-1a và mã hóa giao thức Binary Protocol.
 
-## Kiểu dữ liệu đặc thù
-- `FixedPoint`: Hàm tiện ích tính toán định phẩy, phân giải tiêu chuẩn `FP_MULTIPLIER = 1000`.
-- `PRNG`: Lớp sinh số ngẫu nhiên xác định (Park-Miller), đảm bảo Sync tuyệt đối.
-- `Vector2Pool`: Hàng đợi vector2 đệm để triệt tiêu Garbage Collection (GC).
+## 2. Kiểu dữ liệu đặc thù
+Không có interface chuyên biệt nào. Các Class xuất ra dưới dạng Static Utils.
 
-## Tham số nghiệp vụ
-- Độ phân giải mặc định: 3 chữ số thập phân (Multiplier = 1000). Số sinh ngẫu nhiên max modulo 2147483647.
+## 3. Tham số nghiệp vụ
+- Kích thước binary encode: 12 bytes/packet.
+- `FNV_PRIME` = 16777619
+- `OFFSET_BASIS` = 2166136261
 
-## Hướng dẫn Kiểm thử cục bộ
-Dành riêng cho test logic nội bộ không phụ thuộc Server/Client. Có thể test độ chính xác PRNG và Vector pool qua Node/Bun.
+## 4. Hướng dẫn Kiểm thử cục bộ
+Chạy lệnh kiểm thử đơn vị:
+```bash
+bun test
+```
 
-## Nhật ký thay đổi (Change Log)
-- Áp dụng `FP_MULTIPLIER = 1000`.
-- Triển khai PRNG dựa trên thuật toán Park-Miller và rangeFixed.
+## 5. Nhật ký thay đổi
+- Triển khai `FNV1a` để tính toán state hash.
+- Bổ sung `BinaryEncoder` để giảm băng thông lệnh MOVE xuống còn 12 Bytes.
